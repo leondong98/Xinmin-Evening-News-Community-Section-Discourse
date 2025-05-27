@@ -1,0 +1,17 @@
+---
+title: '研讨会7: 语言模型C：神经网络、迁移学习与Transformer架构'
+
+---
+
+# 研讨会7: 语言模型C：神经网络、迁移学习与Transformer架构
+
+
+本次研讨课将向你介绍 transformer 模型，这些模型通过 HuggingFace 的 transformers 库在 Python 中实现。目前，这是使用 transformer 模型最直接的方法——在 R 中并没有很好的替代方案。其关键原因是：HuggingFace 作为一个模型库及其对应的分词器平台，是专为 Python 集成设计的。HuggingFace 提供了一个模型集散中心及配套的函数库，使得获取预训练模型、对其进行微调，以及将模型分享给其他研究者进一步修改变得相对容易。
+
+所有这些意味着：我们需要在 Python 中进行操作。但不用担心，我们不要求你编写任何原始的 Python 代码。所有用于推理（inference）和模型微调所需的代码都已为你准备好。我们也不要求你在评估中理解这些代码——这些材料只是作为一个初步入门，并为你将来在研究中想使用 transformer 模型时提供一个可回溯的资源。
+
+使用 Python 的一个关键难点是环境设置。与 R 和 RStudio 不同，Python 没有统一推荐的界面。相反，有许多可选工具，如 Jupyter Notebook、Spyder、VS Code、PyCharm 等，各自适用于不同的工作流。而在本地设置这些环境可能较为繁琐，尤其是由于 Python 中更容易发生包依赖冲突的问题。为了避免这些问题，我们将使用 Colab。
+
+Colab 提供了一个虚拟的、临时的 Python 运行环境，无需任何设置。要在 Colab 中打开研讨会材料，只需点击下方的链接即可：
+
+[研讨会材料](https://colab.research.google.com/drive/13pwzJBE11WHG7HVHCzdfYhDAzGqC3Ysk#scrollTo=R96t9J16EQC-)
