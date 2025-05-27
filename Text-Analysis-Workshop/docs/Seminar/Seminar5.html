@@ -1,0 +1,1073 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.31">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>研讨会5：文本作为数据B：词嵌入 – Text Analysis Workshop</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-e1a5c8363afafaef2c763b6775fbf3ca.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-c1fac2584b48ed01fb6e278e36375074.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+</head>
+
+<body class="nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">Text Analysis Workshop</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-seminars" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Seminars</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-seminars">    
+        <li>
+    <a class="dropdown-item" href="../Seminar/Seminar1.html">
+ <span class="dropdown-text">Seminar 1</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../Seminar/Seminar2.html">
+ <span class="dropdown-text">Seminar 2</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../Seminar/Seminar3.html">
+ <span class="dropdown-text">Seminar 3</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../Seminar/Seminar4.html">
+ <span class="dropdown-text">Seminar 4</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../Seminar/Seminar5.html">
+ <span class="dropdown-text">Seminar 5</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../Seminar/Seminar6.html">
+ <span class="dropdown-text">Seminar 6</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../Seminar/Seminar7.html">
+ <span class="dropdown-text">Seminar 7</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../简单R入门.html">
+ <span class="dropdown-text">简单R入门</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../Tidyverse包介绍.html">
+ <span class="dropdown-text">Tidyverse包介绍</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../代码帮助.html">
+ <span class="dropdown-text">代码帮助</span></a>
+  </li>  
+    </ul>
+  </li>
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#研讨会5文本作为数据b词嵌入" id="toc-研讨会5文本作为数据b词嵌入" class="nav-link active" data-scroll-target="#研讨会5文本作为数据b词嵌入">研讨会5：文本作为数据B：词嵌入</a>
+  <ul class="collapse">
+  <li><a href="#相似性类比与词典扩展" id="toc-相似性类比与词典扩展" class="nav-link" data-scroll-target="#相似性类比与词典扩展">5.1 相似性、类比与词典扩展</a></li>
+  <li><a href="#packages" id="toc-packages" class="nav-link" data-scroll-target="#packages">5.2 Packages</a></li>
+  <li><a href="#数据集" id="toc-数据集" class="nav-link" data-scroll-target="#数据集">5.3 数据集</a></li>
+  <li><a href="#词语相似性" id="toc-词语相似性" class="nav-link" data-scroll-target="#词语相似性">5.4 词语相似性</a></li>
+  <li><a href="#词类比" id="toc-词类比" class="nav-link" data-scroll-target="#词类比">5.5 词类比</a></li>
+  <li><a href="#词典扩展" id="toc-词典扩展" class="nav-link" data-scroll-target="#词典扩展">5.6 词典扩展</a></li>
+  <li><a href="#课后思考" id="toc-课后思考" class="nav-link" data-scroll-target="#课后思考">7.7 课后思考</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">研讨会5：文本作为数据B：词嵌入</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="研讨会5文本作为数据b词嵌入" class="level1">
+<h1>研讨会5：文本作为数据B：词嵌入</h1>
+<p>讲座人：Hanxu hanxu.dong.21@ucl.ac.uk</p>
+<p>
+</p><p><a href="https://pan.baidu.com/s/1widr96E8ZBC0v80lvKpYeg 提取码: b0hs" style="display:inline-block; background-color:#4CAF50; color:white; padding:10px 20px; text-decoration:none; margin-right:10px; border-radius:5px;"> Seminar data </a></p>
+<section id="相似性类比与词典扩展" class="level2">
+<h2 class="anchored" data-anchor-id="相似性类比与词典扩展">5.1 相似性、类比与词典扩展</h2>
+<p>在前几周中，当我们将词语表示为数据时，我们只是简单地计算它们在文档之间和文档内部出现的频率。我们大体上将词语视为<strong>独立的单位</strong>：作为唯一标识某一特定含义的文本字符串，而我们并没有一个自然的相似性概念来将相似的词汇进行归类。</p>
+<p>相比之下，<strong>词嵌入（word embeddings）</strong> 方法将语料库中的每个唯一词汇表示为一个密集的实数向量。正如我们在讲座中所讨论的，这些向量实际编码了大量关于词语用法的信息，这些信息可以在社会科学中的各种问题上加以有效利用。</p>
+<p>在今天的研讨课中，我们将熟悉 <a href="https://nlp.stanford.edu/projects/glove/">GloVe 项目</a>中一些预训练的词向量。我们将使用这些向量来探索词语之间的相似性，执行基于类比的任务，并补充我们在讲座二中学习过的基于词典的测量方法。</p>
+</section>
+<section id="packages" class="level2">
+<h2 class="anchored" data-anchor-id="packages">5.2 Packages</h2>
+<p>在开始研讨会时，先下载/加载以下 R 包：</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(quanteda)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co"># install.packages("text2vec")</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(text2vec)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="数据集" class="level2">
+<h2 class="anchored" data-anchor-id="数据集">5.3 数据集</h2>
+<p>今天我们将使用预训练的 GloVe 词嵌入，这些文件可以从研讨课页面顶部的链接下载。请注意，包含词嵌入的文件非常大！因此，建议你可以提前一天先下载好。</p>
+<p>尽管文件体积很大，我们实际上使用的是 GloVe 词嵌入中较小的一个版本，它是在维基百科和新闻数据的组合上训练而成的。这些词嵌入的维度为 300，涵盖约 40 万个词汇。请注意，你也可以从 <a href="https://nlp.stanford.edu/projects/glove/">GloVe 项目官网</a>中下载更大版本的词嵌入来复现本次练习中的所有任务，但对于我们这里的应用而言，使用更大的模型所带来的差异可能是微乎其微的。</p>
+</section>
+<section id="词语相似性" class="level2">
+<h2 class="anchored" data-anchor-id="词语相似性">5.4 词语相似性</h2>
+<ol type="1">
+<li>使用 <code>load()</code> 函数将 GloVe 词嵌入加载到 R 中。</li>
+</ol>
+<details>
+<summary>
+Reveal Code
+</summary>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="st">"glove_embeddings.Rdata"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<ol start="2" type="1">
+<li>看看 Glove 嵌入对象的大小。这个对象有多少行？有多少列？分别表示了什么？</li>
+</ol>
+<details>
+<summary>
+Reveal Code
+</summary>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(glove)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre><code>[1] 400000    300   </code></pre>
+<blockquote class="blockquote">
+<p>行代表单词。列代表嵌入的维度。</p>
+</blockquote>
+</details>
+<ol start="3" type="1">
+<li>写一个函数，用于计算给定词汇与 GloVe 词嵌入对象中所有其他词之间的余弦相似度。你可以使用 <code>text2vec</code> 包中的 <code>sim2()</code> 函数来实现此操作。你的函数应包含两个输入参数：</li>
+</ol>
+<ul>
+<li><code>target_word</code>：你希望计算相似度的目标词</li>
+<li><code>n</code>：你希望返回的最近邻词的数量（按相似度排序） 该函数将帮助你快速发现与任一词语最相近的词汇，有助于理解词语在向量空间中的语义邻近性。</li>
+</ul>
+<details>
+<summary>
+Reveal Code
+</summary>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>similarities <span class="ot">&lt;-</span> <span class="cf">function</span>(target_word, n){</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># 提取目标词的词向量</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  target_vector <span class="ot">&lt;-</span> glove[<span class="fu">which</span>(<span class="fu">rownames</span>(glove) <span class="sc">%in%</span> target_word),]  </span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="co"># 计算目标词与其他词之间的余弦相似度</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  target_sim <span class="ot">&lt;-</span> <span class="fu">sim2</span>(glove, <span class="fu">matrix</span>(target_vector, <span class="at">nrow =</span> <span class="dv">1</span>))</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>  <span class="co"># 返回与目标词最相近的前 n 个词</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">names</span>(<span class="fu">sort</span>(target_sim[,<span class="dv">1</span>], <span class="at">decreasing =</span> T))[<span class="dv">1</span><span class="sc">:</span>n]</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<ol start="4" type="1">
+<li>根据你写好的这个函数，找出与下列三个词最相似的前七个词: “quantitative”; “text”; “analysis”(你也可以尝试一些别的词)</li>
+</ol>
+<details>
+<summary>
+Reveal Code
+</summary>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">similarities</span>(<span class="st">"quantitative"</span>, <span class="at">n =</span> <span class="dv">7</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre><code>[1] "quantitative" "qualitative"  "empirical"    "measurement"  "analysis"    
+[6] "methodology"  "analytical"     </code></pre>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">similarities</span>(<span class="st">"text"</span>, <span class="at">n =</span> <span class="dv">7</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre><code>[1] "text"     "texts"    "document" "read"     "messages" "written"  "copy"       </code></pre>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">similarities</span>(<span class="st">"analysis"</span>, <span class="at">n =</span> <span class="dv">7</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre><code>[1] "analysis"    "analyses"    "study"       "data"        "studies"    
+[6] "analyzed"    "methodology"      </code></pre>
+</details>
+</section>
+<section id="词类比" class="level2">
+<h2 class="anchored" data-anchor-id="词类比">5.5 词类比</h2>
+<ol type="1">
+<li>编写一个函数，用于计算形式为 “a is to b as c is to ___” 的类比关系。例如，如果 b 是 “king”，a 是 “man”，c 是 “woman”，那么缺失的词应该是 “queen”。 你的函数需要接受四个参数。前三个参数应对应于类比中包含的词。第四个参数应是一个指定返回最近邻词数量的参数。</li>
+</ol>
+<details>
+<summary>
+Reveal Code
+</summary>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>analogies <span class="ot">&lt;-</span> <span class="cf">function</span>(a, b, c, n){</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># 提取类比任务中三个词的词向量</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  a_vec <span class="ot">&lt;-</span> glove[<span class="fu">which</span>(<span class="fu">rownames</span>(glove) <span class="sc">==</span> a),]</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>  b_vec <span class="ot">&lt;-</span> glove[<span class="fu">which</span>(<span class="fu">rownames</span>(glove) <span class="sc">==</span> b),]</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>  c_vec <span class="ot">&lt;-</span> glove[<span class="fu">which</span>(<span class="fu">rownames</span>(glove) <span class="sc">==</span> c),]</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>  <span class="co"># 生成类比向量（向量(c) - 向量(a) + 向量(b)）</span></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>  target <span class="ot">&lt;-</span> c_vec <span class="sc">-</span> a_vec <span class="sc">+</span> b_vec</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>  <span class="co"># 计算类比向量与所有其他向量之间的余弦相似度</span></span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>  target_sim <span class="ot">&lt;-</span> <span class="fu">sim2</span>(glove, <span class="fu">matrix</span>(target, <span class="at">nrow =</span> <span class="dv">1</span>))</span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>  <span class="co"># 返回与类比向量最相似的前 n 个词</span></span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">names</span>(<span class="fu">sort</span>(target_sim[,<span class="dv">1</span>], <span class="at">decreasing =</span> T))[<span class="dv">1</span><span class="sc">:</span>n]</span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>}     </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<ol start="2" type="1">
+<li>使用你上面创建的函数来求解以下类比填空任务的词嵌入答案。</li>
+</ol>
+<ul>
+<li>Einstein is to scientist as Picasso is to ___?</li>
+<li>Arsenal is to football as Yankees is to ___?</li>
+<li>Actor is to theatre as doctor is to ___?</li>
+</ul>
+<details>
+<summary>
+Reveal Code
+</summary>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">analogies</span>(<span class="st">"einstein"</span>, <span class="st">"scientist"</span>, <span class="st">"picasso"</span>, <span class="dv">6</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre><code>[1] "picasso"   "painter"   "painting"  "artist"    "paintings" "scientist"  </code></pre>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">analogies</span>(<span class="st">"arsenal"</span>, <span class="st">"football"</span>, <span class="st">"yankees"</span>, <span class="dv">6</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre><code>[1] "baseball"   "yankees"    "sox"        "football"   "basketball"
+[6] "braves"   </code></pre>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">analogies</span>(<span class="st">"actor"</span>, <span class="st">"theatre"</span>, <span class="st">"doctor"</span>, <span class="dv">6</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre><code>[1] "theatre"  "doctor"   "hospital" "medical"  "theater"  "doctors"   </code></pre>
+</details>
+<ol start="3" type="1">
+<li>尝试一些其他词的类比！</li>
+</ol>
+</section>
+<section id="词典扩展" class="level2">
+<h2 class="anchored" data-anchor-id="词典扩展">5.6 词典扩展</h2>
+<p>在研讨会2中，我们使用了道德基础词典（Moral Foundations Dictionary, MFD）来评估 Reddit 帖子中的道德内容。在本次研讨会中，我们将使用 GloVe 词嵌入来扩展 MFD 中的 “care” 类别。</p>
+<p>为完成这一部分任务，你需要再次访问我们在研讨课 2 中使用的文件： - <code>mft_dictionary.csv</code> - <code>mft_texts.csv</code> 现在请找到这些文件（如果需要，可以重新下载）一旦找到了这些文件，请将它们加载到 R 中。</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>mft_dictionary_words <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"mft_dictionary.csv"</span>)</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>mft_texts <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"mft_texts.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ol type="1">
+<li>创建一个包含 MFT 词典中 “Care” 类别词汇的向量。</li>
+</ol>
+<details>
+<summary>
+Reveal Code
+</summary>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>care_words <span class="ot">&lt;-</span> mft_dictionary_words<span class="sc">$</span>word[mft_dictionary_words<span class="sc">$</span>foundation <span class="sc">==</span> <span class="st">"care"</span>] </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<ol start="2" type="1">
+<li>从 <code>glove</code> 中提取与 “care” 类别词汇相关的词嵌入向量。</li>
+</ol>
+<details>
+<summary>
+Reveal Code
+</summary>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>care_embeddings <span class="ot">&lt;-</span> glove[<span class="fu">rownames</span>(glove) <span class="sc">%in%</span> care_words,]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<ol start="3" type="1">
+<li>计算 “care” 词汇的平均嵌入向量。请使用 <code>colMeans</code> 函数，它可以计算矩阵每一列的均值。</li>
+</ol>
+<details>
+<summary>
+Reveal Code
+</summary>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>care_embeddings_mean <span class="ot">&lt;-</span> <span class="fu">colMeans</span>(care_embeddings)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<ol start="4" type="1">
+<li>计算 care 平均向量与 <code>glove</code> 嵌入对象中所有其他词之间的相似度。为此，再次使用 <code>sim2()</code> 函数。</li>
+</ol>
+<details>
+<summary>
+Reveal Code
+</summary>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>target_sim <span class="ot">&lt;-</span> <span class="fu">sim2</span>(<span class="at">x =</span> glove,</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>                   <span class="at">y =</span> <span class="fu">matrix</span>(care_embeddings_mean, <span class="at">nrow =</span> <span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<ol start="5" type="1">
+<li>哪些是与 care 平均向量具有最高余弦相似度的 500 个词？这些词中有多少在原始词典中？</li>
+</ol>
+<details>
+<summary>
+Reveal Code
+</summary>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>top500 <span class="ot">&lt;-</span> <span class="fu">names</span>(<span class="fu">sort</span>(target_sim[,<span class="dv">1</span>], <span class="at">decreasing =</span> T))[<span class="dv">1</span><span class="sc">:</span><span class="dv">500</span>]</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(top500<span class="sc">%in%</span>care_words)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre><code>FALSE  TRUE 
+  386   114        </code></pre>
+</details>
+<ol start="6" type="1">
+<li>检查你在上一步中计算出的前 500 个词中不在原始 care 词典中的词。这些词是否体现了 “care” 的概念？</li>
+</ol>
+<details>
+<summary>
+Reveal Code
+</summary>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>top500[<span class="sc">!</span>top500<span class="sc">%in%</span>care_words]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre><code>  [1] "traumatized"     "victimized"      "cruelly"         "helpless"       
+  [5] "innocent"        "unborn"          "sufferings"      "endure"         
+  [9] "terrified"       "frightened"      "sick"            "callous"        
+ [13] "wronged"         "civilians"       "viciously"       "senseless"      
+ [17] "terrorizing"     "frighten"        "beatings"        "horrific"       
+ [21] "risking"         "inhumane"        "unspeakable"     "confess"        
+ [25] "humiliation"     "defenseless"     "loneliness"      "terrorize"      
+ [29] "grief"           "bereaved"        "injustice"       "subjecting"     
+ [33] "vengeful"        "innocents"       "misfortune"      "abuse"          
+ [37] "neglect"         "plight"          "treating"        "traumatised"    
+ [41] "stigmatized"     "oppression"      "starving"        "humiliate"      
+ [45] "oftentimes"      "grievous"        "unjustly"        "grieving"       
+ [49] "humiliated"      "betrayed"        "spared"          "mutilation"     
+ [53] "lest"            "ashamed"         "heinous"         "enemies"        
+ [57] "abusive"         "barbaric"        "elderly"         "starve"         
+ [61] "fear"            "neglecting"      "terrible"        "deprived"       
+ [65] "dignity"         "deprive"         "beings"          "dying"          
+ [69] "mercilessly"     "hatred"          "grievously"      "oneself"        
+ [73] "vicious"         "succumb"         "feelings"        "schoolmates"    
+ [77] "fearful"         "horrible"        "horrifying"      "sparing"        
+ [81] "hardships"       "afraid"          "risked"          "indiscriminate" 
+ [85] "unnecessarily"   "bystanders"      "heartless"       "shame"          
+ [89] "ordeal"          "offends"         "subjected"       "enslavement"    
+ [93] "handicapped"     "disturbed"       "humanity"        "sacrificing"    
+ [97] "degrading"       "oppressed"       "treat"           "retribution"    
+[101] "maiming"         "injure"          "terrify"         "terminally"     
+[105] "unbearable"      "betray"          "suicidal"        "pretending"     
+[109] "seriously"       "perpetrated"     "destitute"       "maimed"         
+[113] "perpetrator"     "insult"          "demeaning"       "depraved"       
+[117] "betraying"       "selfishness"     "aiding"          "traumas"        
+[121] "taunt"           "brutal"          "belittling"      "sickening"      
+[125] "despair"         "needless"        "orphans"         "repress"        
+[129] "terrorized"      "hardship"        "scared"          "infirm"         
+[133] "husbands"        "savagery"        "townspeople"     "mentally"       
+[137] "punishing"       "disciplining"    "sins"            "savagely"       
+[141] "escaping"        "teasing"         "sickness"        "distraught"     
+[145] "captors"         "pregnant"        "oppress"         "spouse"         
+[149] "indignity"       "intolerable"     "intimidated"     "forgiveness"    
+[153] "countrymen"      "cursed"          "conscience"      "knowing"        
+[157] "trauma"          "deserve"         "punishes"        "strangling"     
+[161] "wickedness"      "sinful"          "punished"        "cruelties"      
+[165] "helplessness"    "punish"          "disrespect"      "perceived"      
+[169] "appalling"       "hysterical"      "bystander"       "disfigurement"  
+[173] "treachery"       "homosexuals"     "debilitating"    "evils"          
+[177] "taunts"          "vindictive"      "betrayal"        "tolerate"       
+[181] "provokes"        "thoughtless"     "avenge"          "intimidate"     
+[185] "feel"            "offend"          "despicable"      "needlessly"     
+[189] "malnourished"    "sexually"        "tolerating"      "bodily"         
+[193] "terrifying"      "passivity"       "abduct"          "betrays"        
+[197] "trusting"        "frightening"     "expose"          "misguided"      
+[201] "barbarity"       "severely"        "perceive"        "imprison"       
+[205] "horrendous"      "depriving"       "sadistic"        "committing"     
+[209] "unworthy"        "treated"         "unjust"          "slaughtering"   
+[213] "painful"         "debilitated"     "scolding"        "enslave"        
+[217] "aftereffects"    "disrespectful"   "victimised"      "awaken"         
+[221] "humankind"       "resentful"       "suffocate"       "hypocritical"   
+[225] "cowardly"        "fleeing"         "judgmental"      "ridicule"       
+[229] "insecurities"    "complicit"       "misery"          "caretakers"     
+[233] "detriment"       "physically"      "tenderly"        "habitually"     
+[237] "malnutrition"    "punishment"      "misbehaving"     "villagers"      
+[241] "emotionally"     "relatives"       "selfish"         "deserving"      
+[245] "destitution"     "gravely"         "exposing"        "companionship"  
+[249] "squeamish"       "brutally"        "guilt"           "imprisoning"    
+[253] "orphaned"        "criminals"       "injustices"      "adolescents"    
+[257] "stigma"          "disobedient"     "sacrificed"      "survivors"      
+[261] "remorse"         "empathetic"      "wanton"          "insults"        
+[265] "unsuspecting"    "enslaving"       "aggression"      "involuntarily"  
+[269] "outweighs"       "ignorance"       "screams"         "addicted"       
+[273] "ostracized"      "subordinates"    "immoral"         "caregivers"     
+[277] "merciless"       "perpetrators"    "powerlessness"   "mutilating"     
+[281] "ills"            "depredations"    "stab"            "affection"      
+[285] "ill-treatment"   "ill"             "blinded"         "callously"      
+[289] "insulted"        "manipulative"    "verbally"        "unintentionally"
+[293] "distract"        "illness"         "ungrateful"      "deprivation"    
+[297] "pretend"         "undermines"      "disfigured"      "impotent"       
+[301] "cursing"         "inconvenience"   "motivates"       "witnessing"     
+[305] "aggressors"      "jealousy"        "suffocating"     "children"       
+[309] "sacrifices"      "jealous"         "hideous"         "ostracism"      
+[313] "perverted"       "horrified"       "insensitive"     "confronting"    
+[317] "illnesses"       "befriend"        "scourge"         "willful"        
+[321] "repression"      "revenge"         "annoy"           "scarred"        
+[325] "curses"          "throats"         "jailers"         "horribly"       
+[329] "repressed"       "bigotry"         "excruciating"    "befriending"    
+[333] "coerce"          "traumatic"       "ugliness"        "revulsion"      
+[337] "exposes"         "patronizing"     "stepmother"      "newborns"       
+[341] "indulging"       "promiscuous"     "confront"        "ministering"    
+[345] "unconscionable"  "insidious"       "tenderness"      "indifference"   
+[349] "gruesome"        "trampling"       "embittered"      "despise"        
+[353] "cowardice"       "hopelessness"    "underlings"      "horrors"        
+[357] "scold"           "atrocious"       "banish"          "persecutions"   
+[361] "brainwashed"     "indignities"     "banishing"       "pretended"      
+[365] "abhorrent"       "wrongs"          "genitals"        "counseled"      
+[369] "atrocities"      "susceptible"     "ferocity"        "indifferent"    
+[373] "autistic"        "deprivations"    "demoralizing"    "unfaithful"     
+[377] "transgressions"  "brainwashing"    "ghastly"         "insufferable"   
+[381] "taunting"        "pillage"         "believing"       "unconscious"    
+[385] "afflicting"      "muggers"        </code></pre>
+</details>
+<ol start="7" type="1">
+<li>你对上一个问题的回答对这种词典扩展方法有何启示？</li>
+</ol>
+<details>
+<summary>
+Reveal Code
+</summary>
+<blockquote class="blockquote">
+<p>这里的核心思想是，使用词嵌入（word embeddings）使我们能够<strong>自动扩展</strong>与某一概念相关的词汇集合，而此前我们是通过手动选定的一组词典词语来进行测量的。</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>这意味着我们可以利用词语之间的相似性信息来补充现有的测量方法。至于这是否会在分类任务中带来性能上的提升，将是下面课后思考中要探讨的主题。</p>
+</blockquote>
+</details>
+</section>
+<section id="课后思考" class="level2">
+<h2 class="anchored" data-anchor-id="课后思考">7.7 课后思考</h2>
+<p><code>mft_texts</code> 对象中包含了一系列变量，这些变量记录了每条文本由人工标注归属到的道德类别。在今天的课后思考中，你将再次使用基于词典的方法对文本进行打分，并将这些词典分数与人工编码进行比较。如果你忘记了如何应用词典，可以回顾研讨会2的材料。</p>
+<ol type="1">
+<li>请创建一个新的词典对象，其中应包含两个类别：</li>
+</ol>
+<ul>
+<li><code>care_original_words</code>：只包含原始 care 词典中的词语；</li>
+<li><code>care_embedding_words</code>：包含原始 care 词典词语以及你在上一部分中提取出的前 500 个最相似词语。</li>
+</ul>
+<details>
+<summary>
+Reveal Code
+</summary>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 创建 dfm</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>mft_dfm <span class="ot">&lt;-</span> mft_texts <span class="sc">%&gt;%</span> </span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">corpus</span>(<span class="at">text_field =</span> <span class="st">"text"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tokens</span>(<span class="at">remove_punct =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dfm</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dfm_trim</span>(<span class="at">min_termfreq =</span> <span class="dv">5</span>)</span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a><span class="co"># 创建 care 词典</span></span>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a>care_dictionary <span class="ot">&lt;-</span> <span class="fu">dictionary</span>(<span class="fu">list</span>(<span class="at">care_original =</span> care_words,</span>
+<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a>                                   <span class="at">care_embedding =</span> <span class="fu">c</span>(top500[<span class="sc">!</span>top500<span class="sc">%in%</span>care_words], care_words)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<ol start="2" type="1">
+<li>使用你刚刚构建的词典对 <code>mft_texts</code> 对象中的文本进行打分。在该对象中创建变量，指示每条文本是否被相应的词典分类为 care 文本（即如果文本中包含该类别词典中的任意词语，则将其分类为 care 文本）。</li>
+</ol>
+<details>
+<summary>
+Reveal Code
+</summary>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 使用词典对文本进行打分</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>care_dfm_dictionary <span class="ot">&lt;-</span> <span class="fu">dfm_lookup</span>(mft_dfm, care_dictionary)</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>mft_texts<span class="sc">$</span>care_original <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(care_dfm_dictionary[,<span class="dv">1</span>]) <span class="sc">&gt;</span> <span class="dv">0</span></span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>mft_texts<span class="sc">$</span>care_embedding <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(care_dfm_dictionary[,<span class="dv">2</span>]) <span class="sc">&gt;</span> <span class="dv">0</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<ol start="3" type="1">
+<li>创建一个混淆矩阵，用于将人工标注与词典打分结果进行比较。你需要分别比较以下两个变量与人工标注的匹配情况：</li>
+</ol>
+<ul>
+<li><code>mft_texts$care_original</code>：使用原始 care 词典的分类结果</li>
+<li><code>mft_texts$care_embedding</code>：使用词嵌入扩展后的 care 词典分类结果 然后，通过混淆矩阵评估：哪种方法表现最好 —— 原始词典，还是词嵌入扩展的方法？</li>
+</ul>
+<details>
+<summary>
+Reveal Code
+</summary>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 计算混淆矩阵：原始 care 词典</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>care_original_confusion <span class="ot">&lt;-</span> <span class="fu">table</span>( </span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">dictionary =</span> mft_texts<span class="sc">$</span>care_original <span class="sc">&gt;</span> <span class="dv">0</span>,</span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">human_coding =</span> mft_texts<span class="sc">$</span>care)</span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a><span class="co"># 计算混淆矩阵：嵌入扩展后的 care 词典</span></span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>care_embedding_confusion <span class="ot">&lt;-</span> <span class="fu">table</span>( </span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">dictionary =</span> mft_texts<span class="sc">$</span>care_embedding <span class="sc">&gt;</span> <span class="dv">0</span>,</span>
+<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">human_coding =</span> mft_texts<span class="sc">$</span>care)</span>
+<span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-11"><a href="#cb30-11" aria-hidden="true" tabindex="-1"></a><span class="co"># 输出原始词典的性能统计</span></span>
+<span id="cb30-12"><a href="#cb30-12" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(caret)</span>
+<span id="cb30-13"><a href="#cb30-13" aria-hidden="true" tabindex="-1"></a><span class="fu">confusionMatrix</span>(care_original_confusion, <span class="at">positive =</span> <span class="st">"TRUE"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre><code>Confusion Matrix and Statistics
+
+          human_coding
+dictionary FALSE  TRUE
+     FALSE 11303  2621
+     TRUE   1843  2119
+                                         
+               Accuracy : 0.7504         
+                 95% CI : (0.744, 0.7567)
+    No Information Rate : 0.735          
+    P-Value [Acc &gt; NIR] : 1.326e-06      
+                                         
+                  Kappa : 0.3238         
+                                         
+ Mcnemar's Test P-Value : &lt; 2.2e-16      
+                                         
+            Sensitivity : 0.4470         
+            Specificity : 0.8598         
+         Pos Pred Value : 0.5348         
+         Neg Pred Value : 0.8118         
+             Prevalence : 0.2650         
+         Detection Rate : 0.1185         
+   Detection Prevalence : 0.2215         
+      Balanced Accuracy : 0.6534         
+                                         
+       'Positive' Class : TRUE        </code></pre>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">confusionMatrix</span>(care_embedding_confusion, <span class="at">positive =</span> <span class="st">"TRUE"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<pre><code>Confusion Matrix and Statistics
+
+          human_coding
+dictionary FALSE  TRUE
+     FALSE 10114  1763
+     TRUE   3032  2977
+                                          
+               Accuracy : 0.7319          
+                 95% CI : (0.7254, 0.7384)
+    No Information Rate : 0.735           
+    P-Value [Acc &gt; NIR] : 0.8265          
+                                          
+                  Kappa : 0.3661          
+                                          
+ Mcnemar's Test P-Value : &lt;2e-16          
+                                          
+            Sensitivity : 0.6281          
+            Specificity : 0.7694          
+         Pos Pred Value : 0.4954          
+         Neg Pred Value : 0.8516          
+             Prevalence : 0.2650          
+         Detection Rate : 0.1664          
+   Detection Prevalence : 0.3360          
+      Balanced Accuracy : 0.6987          
+                                          
+       'Positive' Class : TRUE    </code></pre>
+<blockquote class="blockquote">
+<p>在本例中，当我们引入基于词嵌入相似度扩展出的词语后，预测的准确率略有下降，但分类的敏感性显著提高。这表明，新增的词语在很大程度上提升了我们识别表达“care”概念文本的能力，尽管这也带来了更多的<strong>假阳性结果</strong>（即误将非 care 文本分类为 care）。</p>
+</blockquote>
+</details>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
