@@ -7,29 +7,29 @@ website:
   navbar:
     left:
       - text: "Home"
-        href: Text-Analysis-Workshop/index.qmd
+        href: index.qmd
       - text: "Seminars"
         menu:
           - text: "Seminar 1"
-            href: Text-Analysis-Workshop/Seminar/Seminar1.qmd
+            href: Seminar/Seminar1.qmd
           - text: "Seminar 2"
-            href: Text-Analysis-Workshop/Seminar/Seminar2.qmd
+            href: Seminar/Seminar2.qmd
           - text: "Seminar 3"
-            href: Text-Analysis-Workshop/Seminar/Seminar3.qmd
+            href: Seminar/Seminar3.qmd
           - text: "Seminar 4"
-            href: Text-Analysis-Workshop/Seminar/Seminar4.qmd
+            href: Seminar/Seminar4.qmd
           - text: "Seminar 5"
-            href: Text-Analysis-Workshop/Seminar/Seminar5.qmd
+            href: Seminar/Seminar5.qmd
           - text: "Seminar 6"
-            href: Text-Analysis-Workshop/Seminar/Seminar6.qmd
+            href: Seminar/Seminar6.qmd
           - text: "Seminar 7"
-            href: Text-Analysis-Workshop/Seminar/Seminar7.qmd
+            href: Seminar/Seminar7.qmd
           - text: "简单R入门"
             href: 简单R入门.qmd
-          - text: "Text-Analysis-Workshop/Tidyverse包介绍"
-            href: Text-Analysis-Workshop/Tidyverse包介绍.qmd
+          - text: "Tidyverse包介绍"
+            href: Tidyverse包介绍.qmd
           - text: "代码帮助"
-            href: Text-Analysis-Workshop/代码帮助.qmd
+            href: 代码帮助.qmd
 format:
   html:
     theme: cosmo
